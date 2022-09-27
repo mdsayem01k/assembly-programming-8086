@@ -1,0 +1,180 @@
+;Write a simple calculator program in assembly language
+;programming.
+
+
+;code start from here
+
+include 'emu8086.inc'
+.MODEL SMALL
+.STACK 100H
+.DATA
+
+.CODE
+MAIN PROC 
+    MOV AX,@DATA
+    MOV DS,AX
+     
+    PRINTN "----SIMPLE CALCULATOR---" 
+    PRINTN "FOR ADD PRESS--1" 
+    PRINTN "FOR SUB PRESS--2"
+    PRINTN "FOR MUL PRESS--3"
+    PRINTN "FOR DIV PRESS--4"
+    PRINT "YOU PRESS: "
+  
+    ;INPUT
+  
+    MOV AH,1
+    INT 21H
+    MOV BH,AL
+    SUB BH,48
+    
+    CMP BH,1
+    JE ADD
+    
+    CMP BH,2
+    JE SUB
+     
+    CMP BH,3
+    JE MUL
+    
+    CMP BH,4
+    JE DIV
+    
+    
+    
+    
+  ADD: 
+    call input      ;calll input function
+    
+    ADD AL,BL
+    MOV AH,0
+    AAA
+    
+    
+    MOV BX,AX 
+    ADD BH,48
+    ADD BL,48 
+    
+    PRINTN
+    PRINT "RESULT OF ADDITION: "
+
+    MOV AH,2
+    MOV DL,BH
+    INT 21H
+    
+    MOV AH,2
+    MOV DL,BL
+    INT 21H 
+
+    
+    JMP EXIT_P 
+    
+    
+
+    
+     
+    
+   SUB:
+ 
+    CALL INPUT   ;call input function
+    
+    SUB BL,CL
+    ADD BL,48  
+    
+    
+    PRINTN
+    PRINT "RESULT OF SUBTRACTION: "
+    
+    
+    MOV AH,2
+    MOV DL,BL
+    INT 21H
+     
+    JMP EXIT_P 
+    
+    
+    
+    
+   MUL:
+    CALL INPUT
+    SUB AL,48
+    SUB BL,48
+    
+    
+    MUL BL
+   
+    AAM  
+    
+    
+    ADD AH,30H
+    ADD AL,30H
+    
+    
+    MOV BX,AX 
+   
+    
+    PRINTN
+    PRINT "RESULT OF MULTIPICATION: "
+    
+    MOV AH,2
+    MOV DL,BH
+    INT 21H
+    
+    MOV AH,2
+    MOV DL,BL
+    INT 21H
+    
+    
+    
+    JMP EXIT_P  
+    
+   
+   
+   
+   
+   
+   DIV:
+    CALL INPUT
+    SUB BL,30H
+    MOV AL,BL     ; DIV RULE; 16BIT/8BIT
+    MOV AH,00H
+    SUB CL,30h
+    
+    DIV CL 
+   
+    PRINTN
+    PRINT "RESULT OF DIVISION: "   
+                   ; QUOTIENT STORE IN AL
+    ADD AL,48
+    MOV DL,AL
+    MOV AH,2
+    INT 21H 
+    
+    JMP EXIT_P
+    
+    
+    
+    EXIT_P:
+    
+    MOV AH,4CH
+    INT 21H
+    MAIN ENDP   
+    
+    ;input function
+    
+    INPUT PROC  
+        PRINTN
+        PRINT "ENTER 1ST NUMBER:" 
+        
+        MOV AH,1
+        INT 21H
+        MOV BL,AL
+        PRINTN
+        PRINT "ENTER 2ND NUMBER:"
+       
+        MOV AH,1
+        INT 21H 
+        MOV CL,AL 
+        RET
+    INPUT ENDP
+END MAIN
