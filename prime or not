@@ -1,0 +1,90 @@
+;Write a program to check whether a number inputted via
+;keyboard is prime number or not.
+
+;code start form bellow
+
+include 'emu8086.inc'
+.model small
+.stack 100h
+.data
+.code
+main proc 
+    print "enter the test number: "
+    
+    mov bl,0
+    mov bh,10d    
+    
+    
+    input: 
+    mov ah,1
+    int 21h 
+    cmp al,13d
+    jne number
+    jmp check
+    
+    
+    number:
+    sub al,30h
+    mov cl,al
+    mov al,bh
+    mul bl
+    
+    add al,cl
+    mov bh,al
+    
+    jmp input
+    
+    
+    check:
+    cmp bh,1
+    jle not_prime
+    
+    mov cx,2
+    and ax,0
+    and dx,0
+    
+    mov al,bh
+    div cx
+    
+    mov cx,ax
+    
+    isprime:
+    
+    cmp cx,2
+    jl prime 
+    and ax,00
+    and bx,00
+    
+    mov al,bh
+    div cx
+    dec cx
+    
+    cmp dx,00
+    je not_prime
+    jmp isprime
+    
+    
+    prime:
+    printn
+    printn " prime"
+    jmp exit
+    
+    
+    not_prime: 
+    printn
+    printn " not- prime"
+    jmp exit
+    
+    
+    exit:
+    mov ah,4ch 
+    int 21h
+    
+    main endp
+end main
+    
+    
+    
+    
+    
+    
