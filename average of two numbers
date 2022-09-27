@@ -1,0 +1,60 @@
+;Write a program to print average of two numbers.
+
+.MODEL SMALL
+.STACK
+.DATA
+VAL1    DB      ?   
+VAL2    DB      ?
+MSG1     DB      0AH,0DH,'ENTER 1ST NUMBER:','$'    
+MSG2     DB      0AH,0DH,'ENTER 2ND NUMBER:','$'
+MSG3     DB      0AH,0DH,'AVEARGE:','$'  
+
+.CODE
+MAIN PROC
+    MOV AX,@DATA
+    MOV DS,AX
+    
+    LEA DX,MSG1
+    MOV AH,09H
+    INT 21H 
+    
+    MOV CL,2
+    
+    MOV AH,01H
+    INT 21H
+    SUB AL,30H
+    
+    MOV VAL1,AL     ;STORE 1ST VALUE AT CL
+    
+    ;2ND VALUE INPUT
+    LEA DX,MSG2
+    MOV AH,09H
+    INT 21H
+    
+    MOV AH,01H
+    INT 21H
+    SUB AL,30H 
+    
+    ADD AL,VAL1
+    MOV VAL2,AL 
+    
+    LEA DX,MSG3
+    MOV AH,09H
+    INT 21H
+    
+    MOV AX,00
+    MOV AL,VAL2
+   
+    DIV CL 
+    ADD AX,48
+    MOV DX,AX
+   
+    MOV AH,02H
+    INT 21H 
+    
+    
+    MOV AH,4CH
+    INT 21h 
+
+    MAIN ENDP
+END MAIN
