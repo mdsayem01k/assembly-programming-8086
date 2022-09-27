@@ -1,0 +1,63 @@
+;Write a program to check whether a number inputted via
+;keyboard is Even or Odd. 
+
+
+
+; You may customize this and other start-up templates; 
+; The location of this template is c:\emu8086\inc\0_com_template.txt
+
+org 100h
+
+.model small
+.stack 100h
+.data
+    input db 0ah,0dh,'Input a Numer: $'
+    even db  0ah,0dh,'The Number is Even $'
+    odd db 0ah,0dh,'The Number is Odd $'
+
+.code
+main proc
+    mov ax,@data
+    mov ds,ax 
+    
+    lea dx,input
+    mov ah,9h
+    int 21h
+    
+    mov ah,1
+    int 21h 
+    int 21h  ;for 2digit input
+    
+    
+    mov bl,2
+    div bl     ; div=ax/bl after exe -- ax =quotent bl=reminder
+    
+    cmp dx,0h
+    je if
+    jne else
+     
+    if:
+        lea dx,even
+        mov ah,9h
+        int 21h
+        jmp end
+    
+    else:
+        lea dx,odd
+        mov ah,9h
+        int 21h
+    
+    
+    end:
+        mov ah,4ch
+        int 21h
+    
+    main endp
+end main
+    
+
+ret
+
+
+
+
